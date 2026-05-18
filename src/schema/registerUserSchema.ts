@@ -15,3 +15,5 @@ export const registerUserSchema = z.object({
       'A senha deverá conter pelo menos um caractere especial.',
     ),
 });
+
+export type registerUserType = z.infer<typeof registerUserSchema>;

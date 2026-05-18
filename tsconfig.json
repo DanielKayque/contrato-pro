@@ -10,6 +10,11 @@
     "module": "nodenext",
     "target": "esnext",
     "types": [],
+    //Aqui serve para alertarmos o typescript para lermos esses arquivos
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/@types"
+    ],
     // For nodejs:
     // "lib": ["esnext"],
     // "types": ["node"],

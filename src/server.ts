@@ -1,8 +1,11 @@
 import express from 'express';
+import userRouter from '../src/routes/userRoutes.js';
 
 const app = express();
 
 app.use(express.json());
+
+app.use(userRouter);
 
 app.get('/', (req, res) => {
   return res.json({ message: 'funcionando' });
