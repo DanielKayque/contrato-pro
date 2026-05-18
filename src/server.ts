@@ -7,10 +7,6 @@ app.use(express.json());
 
 app.use(userRouter);
 
-app.get('/', (req, res) => {
-  return res.json({ message: 'funcionando' });
-});
-
 const PORT = process.env.PORT || 3333;
 
 app.listen(PORT, () => {

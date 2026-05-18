@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt';
 import { prisma } from '../lib/prisma.js';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
 
-export class userService {
+export class UserController {
   async criarUsuario(req: Request, res: Response) {
     //Validamos os dados no ZOD
     try {

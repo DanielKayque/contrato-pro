@@ -8,7 +8,7 @@ type ReqBody = {
   password: string;
 };
 
-export class Auth {
+export class AuthController {
   async login(req: Request<{}, {}, ReqBody>, res: Response) {
     const { email, password } = req.body;
 
@@ -16,22 +16,37 @@ export class Auth {
       return res.status(400).json({ message: 'Dados inválidos.' });
     }
 
-    const user = await prisma.usuario.findUnique({ where: { email } });
+    try {
+      const user = await prisma.usuario.findUnique({ where: { email } });
 
-    if (!user) {
-      return res.status(404).json({ message: 'Usuário ou senha incorretos.' });
+      if (!user) {
+        return res
+          .status(401)
+          .json({ message: 'Usuário ou senha incorretos.' });
+      }
+
+      const passwordCompare = await bcrypt.compare(password, user.password);
+
+      if (!passwordCompare) {
+        return res
+          .status(401)
+          .json({ error: true, message: 'Usuário ou senha incorretos.' });
+      }
+
+      const token = jwt.sign(
+        { id: user.id },
+        process.env.JWT_SECRET as string,
+        {
+          expiresIn: '1d',
+        },
+      );
+      return res.status(200).json({ message: 'Seja bem vindo!', token });
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error('Erro interno ' + err.message);
+        return res.status(500).json({ message: 'Ocorreu um erro inesperado.' });
+      }
+      return res.status(500).json({ message: 'Ocorreu um erro desconhecido.' });
     }
-
-    const passwordCompare = await bcrypt.compare(password, user.password);
-
-    if (!passwordCompare) {
-      return res
-        .status(401)
-        .json({ error: true, message: 'Usuário ou senha incorretos.' });
-    }
-
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET as string, {
-      expiresIn: '1d',
-    });
   }
 }
