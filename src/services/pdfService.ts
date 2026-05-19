@@ -1,4 +1,4 @@
-import puppeteer from 'puppeteer-core';
+import htmlPdf from 'html-pdf-node';
 
 type DadosContrato = {
   nomeCliente: string;
@@ -17,7 +17,6 @@ const templates: Record<string, (dados: DadosContrato) => string> = {
       .campo { margin-bottom: 12px; }
       .label { font-size: 11px; text-transform: uppercase; color: #666; letter-spacing: 0.05em; }
       .valor { font-size: 15px; font-weight: 500; }
-      .clausulas { margin-top: 40px; }
       .clausulas h2 { font-size: 14px; margin-bottom: 8px; margin-top: 24px; }
       .clausulas p { font-size: 13px; color: #333; }
       .assinaturas { display: flex; justify-content: space-between; margin-top: 80px; }
@@ -43,15 +42,14 @@ const templates: Record<string, (dados: DadosContrato) => string> = {
         <div class="assinatura">${d.nomeCliente}<br>Contratante</div>
         <div class="assinatura">${d.nomeFreelancer}<br>Contratado</div>
       </div>
-    </body></html>
-  `,
+    </body></html>`,
 
   design: (d) => `
     <html><head><style>
       body { font-family: Arial, sans-serif; padding: 60px; color: #1a1a1a; line-height: 1.7; }
       h1 { font-size: 22px; border-bottom: 2px solid #1a1a1a; padding-bottom: 12px; margin-bottom: 32px; }
       .campo { margin-bottom: 12px; }
-      .label { font-size: 11px; text-transform: uppercase; color: #666; letter-spacing: 0.05em; }
+      .label { font-size: 11px; text-transform: uppercase; color: #666; }
       .valor { font-size: 15px; font-weight: 500; }
       .clausulas h2 { font-size: 14px; margin-bottom: 8px; margin-top: 24px; }
       .clausulas p { font-size: 13px; color: #333; }
@@ -68,25 +66,24 @@ const templates: Record<string, (dados: DadosContrato) => string> = {
         <h2>1. Objeto</h2>
         <p>O contratado se compromete a entregar o serviço de ${d.servico} conforme acordado.</p>
         <h2>2. Direitos de uso</h2>
-        <p>As artes produzidas são de uso exclusivo do contratante após quitação. O contratado pode exibir o trabalho em portfólio.</p>
+        <p>As artes produzidas são de uso exclusivo do contratante após quitação. O contratado pode exibir em portfólio.</p>
         <h2>3. Revisões</h2>
         <p>Estão inclusas até 3 rodadas de revisão. Alterações estruturais após aprovação serão cobradas à parte.</p>
         <h2>4. Entrega</h2>
-        <p>Os arquivos serão entregues nos formatos combinados (AI, PDF, PNG) até ${d.dataFim}.</p>
+        <p>Os arquivos serão entregues nos formatos combinados até ${d.dataFim}.</p>
       </div>
       <div class="assinaturas">
         <div class="assinatura">${d.nomeCliente}<br>Contratante</div>
         <div class="assinatura">${d.nomeFreelancer}<br>Contratado</div>
       </div>
-    </body></html>
-  `,
+    </body></html>`,
 
   consultoria: (d) => `
     <html><head><style>
       body { font-family: Arial, sans-serif; padding: 60px; color: #1a1a1a; line-height: 1.7; }
       h1 { font-size: 22px; border-bottom: 2px solid #1a1a1a; padding-bottom: 12px; margin-bottom: 32px; }
       .campo { margin-bottom: 12px; }
-      .label { font-size: 11px; text-transform: uppercase; color: #666; letter-spacing: 0.05em; }
+      .label { font-size: 11px; text-transform: uppercase; color: #666; }
       .valor { font-size: 15px; font-weight: 500; }
       .clausulas h2 { font-size: 14px; margin-bottom: 8px; margin-top: 24px; }
       .clausulas p { font-size: 13px; color: #333; }
@@ -103,7 +100,7 @@ const templates: Record<string, (dados: DadosContrato) => string> = {
         <h2>1. Objeto</h2>
         <p>O consultor prestará serviços de ${d.servico} durante o período acordado.</p>
         <h2>2. Confidencialidade</h2>
-        <p>O consultor se compromete a manter sigilo sobre todas as informações recebidas durante a prestação dos serviços.</p>
+        <p>O consultor se compromete a manter sigilo sobre todas as informações recebidas.</p>
         <h2>3. Cancelamento</h2>
         <p>O cancelamento deve ser comunicado com 7 dias de antecedência. Sessões já realizadas serão cobradas integralmente.</p>
       </div>
@@ -111,8 +108,7 @@ const templates: Record<string, (dados: DadosContrato) => string> = {
         <div class="assinatura">${d.nomeCliente}<br>Contratante</div>
         <div class="assinatura">${d.nomeFreelancer}<br>Consultor</div>
       </div>
-    </body></html>
-  `,
+    </body></html>`,
 };
 
 export async function gerarPDF(
@@ -120,32 +116,16 @@ export async function gerarPDF(
   dados: DadosContrato,
 ): Promise<Buffer> {
   const templateFn = templates[nicho];
-
-  if (!templateFn) {
-    throw new Error(`Nicho inválido: ${nicho}`);
-  }
+  if (!templateFn) throw new Error(`Nicho inválido: ${nicho}`);
 
   const html = templateFn(dados);
+  const file = { content: html };
+  const options = { format: 'A4' as const };
 
-  // const browser = await puppeteer.launch({
-  //   args: ['--no-sandbox', '--disable-setuid-sandbox'],
-  // });
-
-  const browser = await puppeteer.launch({
-    executablePath: '/usr/bin/google-chrome-stable',
-    args: [
-      '--no-sandbox',
-      '--disable-setuid-sandbox',
-      '--disable-dev-shm-usage',
-      '--disable-gpu',
-    ],
-    headless: true,
+  return new Promise((resolve, reject) => {
+    htmlPdf.generatePdf(file, options, (err: Error, buffer: Buffer) => {
+      if (err) return reject(err);
+      resolve(buffer);
+    });
   });
-
-  const page = await browser.newPage();
-  await page.setContent(html, { waitUntil: 'load' });
-  const pdf = await page.pdf({ format: 'A4', printBackground: true });
-  await browser.close();
-
-  return Buffer.from(pdf);
 }

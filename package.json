@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch --env-file=.env src/server.ts",
-    "build": "apt-get install -y google-chrome-stable || true && prisma generate && tsc && cp -r src/generated dist/src/generated",
+    "build": "prisma generate && tsc && cp -r src/generated dist/src/generated",
     "start": "node dist/src/server.js"
   },
   "keywords": [],
@@ -18,14 +18,15 @@
     "bcrypt": "^6.0.0",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "html-pdf-node": "^1.0.8",
     "jsonwebtoken": "^9.0.3",
     "pg": "^8.20.0",
-    "puppeteer-core": "^25.0.4",
     "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.6",
+    "@types/html-pdf-node": "^1.0.2",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.8.0",
     "@types/pg": "^8.20.0",
