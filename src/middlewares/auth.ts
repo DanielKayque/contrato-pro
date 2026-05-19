@@ -1,14 +1,18 @@
 import type { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 
-type MyTokenPayload = {
-  id: string;
-  iat: number;
-  exp: number;
-};
+type JwtPayload = { id: string };
+
+declare global {
+  namespace Express {
+    interface Request {
+      userId: string;
+    }
+  }
+}
 
 export class Auth {
-  async authentication(req: Request, res: Response, next: NextFunction) {
+  async autenticar(req: Request, res: Response, next: NextFunction) {
     const { authorization } = req.headers;
 
     if (!authorization) {
@@ -21,13 +25,13 @@ export class Auth {
       const decoded = jwt.verify(
         token,
         process.env.JWT_SECRET as string,
-      ) as MyTokenPayload;
+      ) as JwtPayload;
 
       const { id } = decoded;
 
       req.userId = id;
 
-      return next();
+      next();
     } catch (e) {
       //Tratamento para erro do token
       if (e instanceof jwt.JsonWebTokenError) {
