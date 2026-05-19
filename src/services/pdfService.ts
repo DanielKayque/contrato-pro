@@ -1,4 +1,4 @@
-import puppeteer from 'puppeteer';
+import puppeteer from 'puppeteer-core';
 
 type DadosContrato = {
   nomeCliente: string;
@@ -127,8 +127,19 @@ export async function gerarPDF(
 
   const html = templateFn(dados);
 
+  // const browser = await puppeteer.launch({
+  //   args: ['--no-sandbox', '--disable-setuid-sandbox'],
+  // });
+
   const browser = await puppeteer.launch({
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    executablePath: '/usr/bin/google-chrome-stable',
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--disable-dev-shm-usage',
+      '--disable-gpu',
+    ],
+    headless: true,
   });
 
   const page = await browser.newPage();
