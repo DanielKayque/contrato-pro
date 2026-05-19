@@ -1,4 +1,4 @@
-/src/generated/prisma
+# /src/generated/prisma
 # Dependências (nunca envie a pasta de pacotes)
 node_modules/
 jspm_packages/
