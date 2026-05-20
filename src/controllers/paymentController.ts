@@ -95,14 +95,13 @@ export default class PaymentController {
             'Este usuário ainda não possui um perfil de cliente no Stripe. Crie o cliente primeiro.',
         });
       }
+
       const paymentIntent = await stripe.paymentIntents.create({
-        amount: VALOR_PLANO_CENTAVOS,
+        amount: Number(process.env.VALOR_PLANO_CENTAVOS),
         currency: 'brl',
         customer: usuario.stripe_customer_id,
         payment_method_types: ['card'], // Você pode adicionar 'pix' aqui se sua conta Stripe estiver configurada para isso
         metadata: {
-          // Metadados servem para você guardar fofocas/informações úteis que não mudam o preço.
-          // O Stripe salva isso no painel deles. É ótimo para auditoria.
           usuario_id_interno: usuario.id,
         },
       });
