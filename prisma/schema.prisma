@@ -21,9 +21,10 @@ model Usuario {
   id        String     @id @default(uuid())
   email     String     @unique
   name      String
-  criado_em  DateTime   @default(now())
+  criado_em DateTime   @default(now())
   password  String
   plano     tipoPlano  @default(FREE)
+  stripe_customer_id String? @unique
   contratos Contrato[]
 }
 

@@ -8,14 +8,11 @@ const router = Router();
 
 const userController = new UserController();
 const authController = new AuthController();
-const contratoController = new ContratoController();
-const { autenticar } = new Auth();
+
 
 router.post('/', userController.criarUsuario);
 router.post('/login', authController.login);
 
-// Rotas de contratos — todas protegidas
-router.post('/contratos/gerar', autenticar, contratoController.gerar);
-router.get('/contratos', autenticar, contratoController.listar);
+
 
 export default router;

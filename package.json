@@ -21,6 +21,7 @@
     "html-pdf-node": "^1.0.8",
     "jsonwebtoken": "^9.0.3",
     "pg": "^8.20.0",
+    "stripe": "^22.1.1",
     "zod": "^4.4.3"
   },
   "devDependencies": {
