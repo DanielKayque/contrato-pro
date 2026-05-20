@@ -16,4 +16,8 @@ export const registerUserSchema = z.object({
     ),
 });
 
+export const identifyUserSchema = registerUserSchema.omit({ password: true });
+
+export const emailSchema = registerUserSchema.pick({ email: true });
+
 export type registerUserType = z.infer<typeof registerUserSchema>;

@@ -126,7 +126,8 @@ exports.Prisma.UsuarioScalarFieldEnum = {
   name: 'name',
   criado_em: 'criado_em',
   password: 'password',
-  plano: 'plano'
+  plano: 'plano',
+  stripe_customer_id: 'stripe_customer_id'
 };
 
 exports.Prisma.ContratoScalarFieldEnum = {
@@ -153,15 +154,15 @@ exports.Prisma.QueryMode = {
   insensitive: 'insensitive'
 };
 
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
+};
+
 exports.Prisma.JsonNullValueFilter = {
   DbNull: Prisma.DbNull,
   JsonNull: Prisma.JsonNull,
   AnyNull: Prisma.AnyNull
-};
-
-exports.Prisma.NullsOrder = {
-  first: 'first',
-  last: 'last'
 };
 exports.tipoPlano = exports.$Enums.tipoPlano = {
   FREE: 'FREE',

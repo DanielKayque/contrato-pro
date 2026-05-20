@@ -1021,6 +1021,7 @@ export namespace Prisma {
     criado_em: Date | null
     password: string | null
     plano: $Enums.tipoPlano | null
+    stripe_customer_id: string | null
   }
 
   export type UsuarioMaxAggregateOutputType = {
@@ -1030,6 +1031,7 @@ export namespace Prisma {
     criado_em: Date | null
     password: string | null
     plano: $Enums.tipoPlano | null
+    stripe_customer_id: string | null
   }
 
   export type UsuarioCountAggregateOutputType = {
@@ -1039,6 +1041,7 @@ export namespace Prisma {
     criado_em: number
     password: number
     plano: number
+    stripe_customer_id: number
     _all: number
   }
 
@@ -1050,6 +1053,7 @@ export namespace Prisma {
     criado_em?: true
     password?: true
     plano?: true
+    stripe_customer_id?: true
   }
 
   export type UsuarioMaxAggregateInputType = {
@@ -1059,6 +1063,7 @@ export namespace Prisma {
     criado_em?: true
     password?: true
     plano?: true
+    stripe_customer_id?: true
   }
 
   export type UsuarioCountAggregateInputType = {
@@ -1068,6 +1073,7 @@ export namespace Prisma {
     criado_em?: true
     password?: true
     plano?: true
+    stripe_customer_id?: true
     _all?: true
   }
 
@@ -1150,6 +1156,7 @@ export namespace Prisma {
     criado_em: Date
     password: string
     plano: $Enums.tipoPlano
+    stripe_customer_id: string | null
     _count: UsuarioCountAggregateOutputType | null
     _min: UsuarioMinAggregateOutputType | null
     _max: UsuarioMaxAggregateOutputType | null
@@ -1176,6 +1183,7 @@ export namespace Prisma {
     criado_em?: boolean
     password?: boolean
     plano?: boolean
+    stripe_customer_id?: boolean
     contratos?: boolean | Usuario$contratosArgs<ExtArgs>
     _count?: boolean | UsuarioCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["usuario"]>
@@ -1187,6 +1195,7 @@ export namespace Prisma {
     criado_em?: boolean
     password?: boolean
     plano?: boolean
+    stripe_customer_id?: boolean
   }, ExtArgs["result"]["usuario"]>
 
   export type UsuarioSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1196,6 +1205,7 @@ export namespace Prisma {
     criado_em?: boolean
     password?: boolean
     plano?: boolean
+    stripe_customer_id?: boolean
   }, ExtArgs["result"]["usuario"]>
 
   export type UsuarioSelectScalar = {
@@ -1205,9 +1215,10 @@ export namespace Prisma {
     criado_em?: boolean
     password?: boolean
     plano?: boolean
+    stripe_customer_id?: boolean
   }
 
-  export type UsuarioOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "name" | "criado_em" | "password" | "plano", ExtArgs["result"]["usuario"]>
+  export type UsuarioOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "name" | "criado_em" | "password" | "plano" | "stripe_customer_id", ExtArgs["result"]["usuario"]>
   export type UsuarioInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     contratos?: boolean | Usuario$contratosArgs<ExtArgs>
     _count?: boolean | UsuarioCountOutputTypeDefaultArgs<ExtArgs>
@@ -1227,6 +1238,7 @@ export namespace Prisma {
       criado_em: Date
       password: string
       plano: $Enums.tipoPlano
+      stripe_customer_id: string | null
     }, ExtArgs["result"]["usuario"]>
     composites: {}
   }
@@ -1657,6 +1669,7 @@ export namespace Prisma {
     readonly criado_em: FieldRef<"Usuario", 'DateTime'>
     readonly password: FieldRef<"Usuario", 'String'>
     readonly plano: FieldRef<"Usuario", 'tipoPlano'>
+    readonly stripe_customer_id: FieldRef<"Usuario", 'String'>
   }
     
 
@@ -3197,7 +3210,8 @@ export namespace Prisma {
     name: 'name',
     criado_em: 'criado_em',
     password: 'password',
-    plano: 'plano'
+    plano: 'plano',
+    stripe_customer_id: 'stripe_customer_id'
   };
 
   export type UsuarioScalarFieldEnum = (typeof UsuarioScalarFieldEnum)[keyof typeof UsuarioScalarFieldEnum]
@@ -3239,6 +3253,14 @@ export namespace Prisma {
   export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
 
 
+  export const NullsOrder: {
+    first: 'first',
+    last: 'last'
+  };
+
+  export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
   export const JsonNullValueFilter: {
     DbNull: typeof DbNull,
     JsonNull: typeof JsonNull,
@@ -3246,14 +3268,6 @@ export namespace Prisma {
   };
 
   export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
-
-
-  export const NullsOrder: {
-    first: 'first',
-    last: 'last'
-  };
-
-  export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
   /**
@@ -3344,6 +3358,7 @@ export namespace Prisma {
     criado_em?: DateTimeFilter<"Usuario"> | Date | string
     password?: StringFilter<"Usuario"> | string
     plano?: EnumtipoPlanoFilter<"Usuario"> | $Enums.tipoPlano
+    stripe_customer_id?: StringNullableFilter<"Usuario"> | string | null
     contratos?: ContratoListRelationFilter
   }
 
@@ -3354,12 +3369,14 @@ export namespace Prisma {
     criado_em?: SortOrder
     password?: SortOrder
     plano?: SortOrder
+    stripe_customer_id?: SortOrderInput | SortOrder
     contratos?: ContratoOrderByRelationAggregateInput
   }
 
   export type UsuarioWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     email?: string
+    stripe_customer_id?: string
     AND?: UsuarioWhereInput | UsuarioWhereInput[]
     OR?: UsuarioWhereInput[]
     NOT?: UsuarioWhereInput | UsuarioWhereInput[]
@@ -3368,7 +3385,7 @@ export namespace Prisma {
     password?: StringFilter<"Usuario"> | string
     plano?: EnumtipoPlanoFilter<"Usuario"> | $Enums.tipoPlano
     contratos?: ContratoListRelationFilter
-  }, "id" | "email">
+  }, "id" | "email" | "stripe_customer_id">
 
   export type UsuarioOrderByWithAggregationInput = {
     id?: SortOrder
@@ -3377,6 +3394,7 @@ export namespace Prisma {
     criado_em?: SortOrder
     password?: SortOrder
     plano?: SortOrder
+    stripe_customer_id?: SortOrderInput | SortOrder
     _count?: UsuarioCountOrderByAggregateInput
     _max?: UsuarioMaxOrderByAggregateInput
     _min?: UsuarioMinOrderByAggregateInput
@@ -3392,6 +3410,7 @@ export namespace Prisma {
     criado_em?: DateTimeWithAggregatesFilter<"Usuario"> | Date | string
     password?: StringWithAggregatesFilter<"Usuario"> | string
     plano?: EnumtipoPlanoWithAggregatesFilter<"Usuario"> | $Enums.tipoPlano
+    stripe_customer_id?: StringNullableWithAggregatesFilter<"Usuario"> | string | null
   }
 
   export type ContratoWhereInput = {
@@ -3466,6 +3485,7 @@ export namespace Prisma {
     criado_em?: Date | string
     password: string
     plano?: $Enums.tipoPlano
+    stripe_customer_id?: string | null
     contratos?: ContratoCreateNestedManyWithoutUsuarioInput
   }
 
@@ -3476,6 +3496,7 @@ export namespace Prisma {
     criado_em?: Date | string
     password: string
     plano?: $Enums.tipoPlano
+    stripe_customer_id?: string | null
     contratos?: ContratoUncheckedCreateNestedManyWithoutUsuarioInput
   }
 
@@ -3486,6 +3507,7 @@ export namespace Prisma {
     criado_em?: DateTimeFieldUpdateOperationsInput | Date | string
     password?: StringFieldUpdateOperationsInput | string
     plano?: EnumtipoPlanoFieldUpdateOperationsInput | $Enums.tipoPlano
+    stripe_customer_id?: NullableStringFieldUpdateOperationsInput | string | null
     contratos?: ContratoUpdateManyWithoutUsuarioNestedInput
   }
 
@@ -3496,6 +3518,7 @@ export namespace Prisma {
     criado_em?: DateTimeFieldUpdateOperationsInput | Date | string
     password?: StringFieldUpdateOperationsInput | string
     plano?: EnumtipoPlanoFieldUpdateOperationsInput | $Enums.tipoPlano
+    stripe_customer_id?: NullableStringFieldUpdateOperationsInput | string | null
     contratos?: ContratoUncheckedUpdateManyWithoutUsuarioNestedInput
   }
 
@@ -3506,6 +3529,7 @@ export namespace Prisma {
     criado_em?: Date | string
     password: string
     plano?: $Enums.tipoPlano
+    stripe_customer_id?: string | null
   }
 
   export type UsuarioUpdateManyMutationInput = {
@@ -3515,6 +3539,7 @@ export namespace Prisma {
     criado_em?: DateTimeFieldUpdateOperationsInput | Date | string
     password?: StringFieldUpdateOperationsInput | string
     plano?: EnumtipoPlanoFieldUpdateOperationsInput | $Enums.tipoPlano
+    stripe_customer_id?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UsuarioUncheckedUpdateManyInput = {
@@ -3524,6 +3549,7 @@ export namespace Prisma {
     criado_em?: DateTimeFieldUpdateOperationsInput | Date | string
     password?: StringFieldUpdateOperationsInput | string
     plano?: EnumtipoPlanoFieldUpdateOperationsInput | $Enums.tipoPlano
+    stripe_customer_id?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ContratoCreateInput = {
@@ -3628,10 +3654,30 @@ export namespace Prisma {
     not?: NestedEnumtipoPlanoFilter<$PrismaModel> | $Enums.tipoPlano
   }
 
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
   export type ContratoListRelationFilter = {
     every?: ContratoWhereInput
     some?: ContratoWhereInput
     none?: ContratoWhereInput
+  }
+
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
   }
 
   export type ContratoOrderByRelationAggregateInput = {
@@ -3645,6 +3691,7 @@ export namespace Prisma {
     criado_em?: SortOrder
     password?: SortOrder
     plano?: SortOrder
+    stripe_customer_id?: SortOrder
   }
 
   export type UsuarioMaxOrderByAggregateInput = {
@@ -3654,6 +3701,7 @@ export namespace Prisma {
     criado_em?: SortOrder
     password?: SortOrder
     plano?: SortOrder
+    stripe_customer_id?: SortOrder
   }
 
   export type UsuarioMinOrderByAggregateInput = {
@@ -3663,6 +3711,7 @@ export namespace Prisma {
     criado_em?: SortOrder
     password?: SortOrder
     plano?: SortOrder
+    stripe_customer_id?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -3706,6 +3755,24 @@ export namespace Prisma {
     _min?: NestedEnumtipoPlanoFilter<$PrismaModel>
     _max?: NestedEnumtipoPlanoFilter<$PrismaModel>
   }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
   export type JsonFilter<$PrismaModel = never> =
     | PatchUndefined<
         Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
@@ -3730,29 +3797,9 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
-  export type StringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
   export type UsuarioScalarRelationFilter = {
     is?: UsuarioWhereInput
     isNot?: UsuarioWhereInput
-  }
-
-  export type SortOrderInput = {
-    sort: SortOrder
-    nulls?: NullsOrder
   }
 
   export type ContratoCountOrderByAggregateInput = {
@@ -3809,24 +3856,6 @@ export namespace Prisma {
     _max?: NestedJsonFilter<$PrismaModel>
   }
 
-  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
-  }
-
   export type ContratoCreateNestedManyWithoutUsuarioInput = {
     create?: XOR<ContratoCreateWithoutUsuarioInput, ContratoUncheckedCreateWithoutUsuarioInput> | ContratoCreateWithoutUsuarioInput[] | ContratoUncheckedCreateWithoutUsuarioInput[]
     connectOrCreate?: ContratoCreateOrConnectWithoutUsuarioInput | ContratoCreateOrConnectWithoutUsuarioInput[]
@@ -3851,6 +3880,10 @@ export namespace Prisma {
 
   export type EnumtipoPlanoFieldUpdateOperationsInput = {
     set?: $Enums.tipoPlano
+  }
+
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
   }
 
   export type ContratoUpdateManyWithoutUsuarioNestedInput = {
@@ -3885,10 +3918,6 @@ export namespace Prisma {
     create?: XOR<UsuarioCreateWithoutContratosInput, UsuarioUncheckedCreateWithoutContratosInput>
     connectOrCreate?: UsuarioCreateOrConnectWithoutContratosInput
     connect?: UsuarioWhereUniqueInput
-  }
-
-  export type NullableStringFieldUpdateOperationsInput = {
-    set?: string | null
   }
 
   export type UsuarioUpdateOneRequiredWithoutContratosNestedInput = {
@@ -3929,6 +3958,20 @@ export namespace Prisma {
     in?: $Enums.tipoPlano[] | ListEnumtipoPlanoFieldRefInput<$PrismaModel>
     notIn?: $Enums.tipoPlano[] | ListEnumtipoPlanoFieldRefInput<$PrismaModel>
     not?: NestedEnumtipoPlanoFilter<$PrismaModel> | $Enums.tipoPlano
+  }
+
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
@@ -3983,43 +4026,6 @@ export namespace Prisma {
     _max?: NestedEnumtipoPlanoFilter<$PrismaModel>
   }
 
-  export type NestedStringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-  export type NestedJsonFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
-        Required<NestedJsonFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>
-
-  export type NestedJsonFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
-
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -4046,6 +4052,29 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+  export type NestedJsonFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
   export type ContratoCreateWithoutUsuarioInput = {
@@ -4112,6 +4141,7 @@ export namespace Prisma {
     criado_em?: Date | string
     password: string
     plano?: $Enums.tipoPlano
+    stripe_customer_id?: string | null
   }
 
   export type UsuarioUncheckedCreateWithoutContratosInput = {
@@ -4121,6 +4151,7 @@ export namespace Prisma {
     criado_em?: Date | string
     password: string
     plano?: $Enums.tipoPlano
+    stripe_customer_id?: string | null
   }
 
   export type UsuarioCreateOrConnectWithoutContratosInput = {
@@ -4146,6 +4177,7 @@ export namespace Prisma {
     criado_em?: DateTimeFieldUpdateOperationsInput | Date | string
     password?: StringFieldUpdateOperationsInput | string
     plano?: EnumtipoPlanoFieldUpdateOperationsInput | $Enums.tipoPlano
+    stripe_customer_id?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UsuarioUncheckedUpdateWithoutContratosInput = {
@@ -4155,6 +4187,7 @@ export namespace Prisma {
     criado_em?: DateTimeFieldUpdateOperationsInput | Date | string
     password?: StringFieldUpdateOperationsInput | string
     plano?: EnumtipoPlanoFieldUpdateOperationsInput | $Enums.tipoPlano
+    stripe_customer_id?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ContratoCreateManyUsuarioInput = {
