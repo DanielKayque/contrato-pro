@@ -53,9 +53,14 @@ export default class PaymentController {
         },
       });
 
+      const cust = await stripe.customers.list();
+
       return res
         .status(201)
-        .json({ message: 'Usuário criado no Stripe com sucesso.' });
+        .json({
+          message: 'Usuário criado no Stripe com sucesso.',
+          getAll: cust.data,
+        });
     } catch (err) {
       if (err instanceof PrismaClientKnownRequestError) {
         if (err.code === 'P2025') {
@@ -105,6 +110,38 @@ export default class PaymentController {
           usuario_id_interno: usuario.id,
         },
       });
-    } catch (err) {}
+
+      return res.status(201).json({
+        message: 'Intenção de pagamento gerada com sucesso.',
+        clientSecret: paymentIntent.client_secret,
+        paymentIntentId: paymentIntent.id,
+      });
+    } catch (err) {
+      console.error(err);
+      return res
+        .status(500)
+        .json({ message: 'Ocorreu um erro ao gerar a intenção de pagamento.' });
+    }
+  }
+
+  async confirmPaymentIntent(req: Request, res: Response) {
+    try {
+      const { paymentIntentId } = req.body;
+
+      const confirmed = await stripe.paymentIntents.confirm(paymentIntentId, {
+        payment_method: 'pm_card_visa',
+      });
+
+      return res.status(200).json({
+        status: confirmed.status,
+        data: confirmed,
+      });
+    } catch (err) {
+      console.error(err);
+
+      return res.status(500).json({
+        message: 'Erro ao confirmar pagamento',
+      });
+    }
   }
 }

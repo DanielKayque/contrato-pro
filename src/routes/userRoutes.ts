@@ -10,7 +10,7 @@ const userController = new UserController();
 const authController = new AuthController();
 
 
-router.post('/', userController.criarUsuario);
+router.post('/register', userController.criarUsuario);
 router.post('/login', authController.login);
 
 
