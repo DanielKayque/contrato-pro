@@ -44,9 +44,13 @@ export class AuthController {
     } catch (err) {
       if (err instanceof Error) {
         console.error('Erro interno ' + err.message);
-        return res.status(500).json({ message: 'Ocorreu um erro inesperado.' });
+        return res
+          .status(500)
+          .json({ message: 'Ocorreu um erro inesperado.' + err.message });
       }
-      return res.status(500).json({ message: 'Ocorreu um erro desconhecido.' });
+      return res
+        .status(500)
+        .json({ message: 'Ocorreu um erro desconhecido.' + err });
     }
   }
 }
