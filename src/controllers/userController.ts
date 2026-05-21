@@ -15,6 +15,7 @@ export class UserController {
         const errorTree = z.treeifyError(result.error);
 
         return res.status(400).json({
+          success: false,
           message: errorTree,
           error: errorTree.errors,
         });
@@ -24,7 +25,7 @@ export class UserController {
 
       const senhaHash = await bcrypt.hash(password, 10);
 
-      const newUser = await prisma.usuario.create({
+      const usuario = await prisma.usuario.create({
         data: {
           email,
           name,
@@ -36,15 +37,25 @@ export class UserController {
         },
       });
 
-      return res.status(201).json({ message: 'Usuário foi criado.', newUser });
+      return res
+        .status(201)
+        .json({
+          success: true,
+          message: 'Usuário criado com sucesso.',
+          data: usuario,
+        });
     } catch (err: unknown) {
       if (err instanceof PrismaClientKnownRequestError) {
         if (err.code === 'P2002') {
           return res.status(409).json({
+            success: false,
             message: 'Esse email já existe',
           });
         }
       }
+      return res
+        .status(500)
+        .json({ success: false, message: 'Ocorreu um erro inesperado.' });
     }
   }
 }
