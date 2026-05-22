@@ -108,4 +108,27 @@ export class AuthController {
         .json({ success: false, message: 'Ocorreu um erro inesperado.' });
     }
   }
+
+  async authMe(req: Request, res: Response) {
+    try {
+      const user = await prisma.usuario.findUnique({
+        where: { id: req.userId },
+        select: {
+          id: true,
+          name: true,
+          plano: true,
+          email: true,
+          criado_em: true,
+        },
+      });
+      if (!user) {
+        return res
+          .status(404)
+          .json({ success: false, message: 'Usuário não encontrado.' });
+      }
+      return res.status(200).json({ success: true, data: user });
+    } catch (err) {
+      return res.status(500).json({ success: false, message: 'Erro interno.' });
+    }
+  }
 }
