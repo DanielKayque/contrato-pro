@@ -18,7 +18,7 @@ export class AuthController {
     if (!email || !password) {
       return res
         .status(400)
-        .json({ sucess: false, message: 'Dados inválidos.' });
+        .json({ success: false, message: 'Dados inválidos.' });
     }
 
     try {
@@ -27,7 +27,7 @@ export class AuthController {
       if (!user) {
         return res
           .status(401)
-          .json({ sucess: false, message: 'Usuário ou senha incorretos.' });
+          .json({ success: false, message: 'Usuário ou senha incorretos.' });
       }
 
       const passwordCompare = await bcrypt.compare(password, user.password);
@@ -35,7 +35,7 @@ export class AuthController {
       if (!passwordCompare) {
         return res
           .status(401)
-          .json({ sucess: false, message: 'Usuário ou senha incorretos.' });
+          .json({ success: false, message: 'Usuário ou senha incorretos.' });
       }
 
       const token = jwt.sign(
@@ -46,14 +46,14 @@ export class AuthController {
         },
       );
       return res.status(200).json({
-        sucess: true,
+        success: true,
         data: { message: 'Login realizado com sucesso.', token },
       });
     } catch (err) {
       console.error('Erro interno ' + err);
 
       return res.status(500).json({
-        sucess: false,
+        success: false,
         message: 'Ocorreu um erro desconhecido.',
       });
     }
