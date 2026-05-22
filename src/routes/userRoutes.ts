@@ -11,6 +11,6 @@ const { autenticar } = new Auth();
 
 router.post('/register', authController.register);
 router.post('/login', authController.login);
-router.post('/authme', autenticar, authController.authMe);
+router.get('/authme', autenticar, authController.authMe);
 
 export default router;
