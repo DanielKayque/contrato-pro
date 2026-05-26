@@ -53,14 +53,9 @@ export default class PaymentController {
         },
       });
 
-      const cust = await stripe.customers.list();
-
-      return res
-        .status(201)
-        .json({
-          message: 'Usuário criado no Stripe com sucesso.',
-          getAll: cust.data,
-        });
+      return res.status(201).json({
+        message: 'Usuário criado no Stripe com sucesso.',
+      });
     } catch (err) {
       if (err instanceof PrismaClientKnownRequestError) {
         if (err.code === 'P2025') {
