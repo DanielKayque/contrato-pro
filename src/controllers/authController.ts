@@ -45,6 +45,7 @@ export class AuthController {
           expiresIn: '1d',
         },
       );
+      
       return res.status(200).json({
         success: true,
         data: { message: 'Login realizado com sucesso.', token },
