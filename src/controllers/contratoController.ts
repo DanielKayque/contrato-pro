@@ -4,7 +4,7 @@ import { prisma } from '../lib/prisma.js';
 import { gerarPDF } from '../services/pdfService.js';
 
 const criarContratoSchema = z.object({
-  nicho: z.enum(['dev', 'design', 'consultoria']),
+  nicho: z.string().min(1),
   titulo: z.string().min(1),
   nomeCliente: z.string().min(1),
   servico: z.string().min(1),
@@ -82,7 +82,9 @@ export class ContratoController {
     } catch (err) {
       if (err instanceof Error) {
         console.error('Erro ao gerar contrato: ' + err.message);
-        return res.status(500).json({ message: 'Erro ao gerar o contrato.', error: err.message });
+        return res
+          .status(500)
+          .json({ message: 'Erro ao gerar o contrato.', error: err.message });
       }
       return res.status(500).json({ message: 'Erro desconhecido.' });
     }
