@@ -11,6 +11,11 @@ type ReqBody = {
   password: string;
 };
 
+type ValidationBody = {
+  password?: string;
+  name?: string;
+};
+
 export class AuthController {
   async login(req: Request<{}, {}, ReqBody>, res: Response) {
     const { email, password } = req.body;
@@ -67,7 +72,7 @@ export class AuthController {
       if (result.error) {
         const errorTree = z.treeifyError(result.error);
 
-        const fieldErrors = Object.fromEntries(
+        const fieldErrors: ValidationBody = Object.fromEntries(
           Object.entries(errorTree.properties || {}).map(([field, value]) => [
             field,
             value.errors[0] ?? 'Campo inválido',
