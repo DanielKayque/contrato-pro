@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import { UserController } from '../controllers/userController.js';
 import { AuthController } from '../controllers/authController.js';
 import { ContratoController } from '../controllers/contratoController.js';
 import { Auth } from '../middlewares/auth.js';

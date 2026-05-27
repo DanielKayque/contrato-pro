@@ -45,7 +45,7 @@ export class AuthController {
           expiresIn: '1d',
         },
       );
-      
+
       return res.status(200).json({
         success: true,
         data: { message: 'Login realizado com sucesso.', token },
@@ -67,10 +67,17 @@ export class AuthController {
       if (result.error) {
         const errorTree = z.treeifyError(result.error);
 
+        const fieldErrors = Object.fromEntries(
+          Object.entries(errorTree.properties || {}).map(([field, value]) => [
+            field,
+            value.errors[0] ?? 'Campo inválido',
+          ]),
+        );
+
         return res.status(400).json({
           success: false,
-          message: errorTree,
-          error: errorTree.errors,
+          message: 'Dados inválidos',
+          error: fieldErrors,
         });
       }
 
