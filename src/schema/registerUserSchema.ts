@@ -20,4 +20,8 @@ export const identifyUserSchema = registerUserSchema.omit({ password: true });
 
 export const emailSchema = registerUserSchema.pick({ email: true });
 
+export const paymentIntentSchema = emailSchema.extend({
+  priceId: z.string().startsWith('price_'),
+});
+
 export type registerUserType = z.infer<typeof registerUserSchema>;
