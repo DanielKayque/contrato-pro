@@ -11,7 +11,6 @@ const { autenticar } = new Auth();
 router.use(autenticar);
 //Todas as rotas aqui embaixo estão protegidas
 router.post('/customers', paymentControllers.createClient);
-router.post('/payment', paymentControllers.createPaymentIntent);
-router.post('/payment/confirm', paymentControllers.confirmPaymentIntent);
+router.post('/checkout', paymentControllers.createCheckoutSession);
 
 export default router;

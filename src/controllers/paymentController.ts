@@ -75,94 +75,160 @@ export default class PaymentController {
     }
   }
 
-  async createPaymentIntent(req: Request, res: Response) {
-    const result = paymentIntentSchema.safeParse(req.body);
+  //   async createPaymentIntent(req: Request, res: Response) {
+  //     const result = paymentIntentSchema.safeParse(req.body);
 
-    if (result.error) {
-      return res.status(404).json({
-        success: false,
-        message: 'Favor verifique os dados e tente novamente',
-        error: result.error,
-      });
-    }
+  //     if (result.error) {
+  //       return res.status(404).json({
+  //         success: false,
+  //         message: 'Favor verifique os dados e tente novamente',
+  //         error: result.error,
+  //       });
+  //     }
+
+  //     try {
+  //       const { email, priceId } = result.data;
+
+  //       const usuario = await prisma.usuario.findUnique({ where: { email } });
+
+  //       if (!usuario) {
+  //         return res
+  //           .status(404)
+  //           .json({ success: false, message: 'Usuário não encontrado' });
+  //       }
+
+  //       if (!usuario.stripe_customer_id) {
+  //         return res.status(400).json({
+  //           success: false,
+  //           message:
+  //             'Este usuário ainda não possui um perfil de cliente no Stripe. Crie o cliente primeiro.',
+  //         });
+  //       }
+
+  //       //Busca o preço em tempo real
+  //       const stripePrice = await stripe.prices.retrieve(priceId);
+
+  //       if (!stripePrice.unit_amount) {
+  //         return res.status(400).json({
+  //           success: false,
+  //           message: 'Esse item não possui um valor especificado.',
+  //         });
+  //       }
+
+  //       const paymentIntent = await stripe.paymentIntents.create({
+  //         amount: stripePrice.unit_amount,
+  //         currency: stripePrice.currency,
+  //         customer: usuario.stripe_customer_id,
+  //         automatic_payment_methods: {
+  //           enabled: true,
+  //         },
+  //         metadata: {
+  //           usuario_id_interno: usuario.id,
+  //         },
+  //       });
+
+  //       return res.status(201).json({
+  //         success: true,
+  //         message: 'Intenção de pagamento gerada com sucesso.',
+  //         clientSecret: paymentIntent.client_secret,
+  //         paymentIntentId: paymentIntent.id,
+  //       });
+  //     } catch (err) {
+  //       console.error(err);
+  //       return res.status(500).json({
+  //         success: false,
+  //         message: 'Ocorreu um erro ao gerar a intenção de pagamento.',
+  //         error: err,
+  //       });
+  //     }
+  //   }
+
+  //   async confirmPaymentIntent(req: Request, res: Response) {
+  //     try {
+  //       const { paymentIntentId } = req.body;
+
+  //       const confirmed = await stripe.paymentIntents.confirm(paymentIntentId, {
+  //         payment_method: 'pm_card_visa',
+  //       });
+
+  //       return res.status(200).json({
+  //         success: true,
+  //         status: confirmed.status,
+  //         data: confirmed,
+  //       });
+  //     } catch (err) {
+  //       console.error(err);
+
+  //       return res.status(500).json({
+  //         success: false,
+  //         message: 'Erro ao confirmar pagamento',
+  //       });
+  //     }
+  //   }
+  // }
+
+  async createCheckoutSession(req: Request, res: Response) {
+    const { stripe_customer_id } = req.body;
 
     try {
-      const { email, priceId } = result.data;
-
-      const usuario = await prisma.usuario.findUnique({ where: { email } });
-
-      if (!usuario) {
-        return res
-          .status(404)
-          .json({ success: false, message: 'Usuário não encontrado' });
-      }
-
-      if (!usuario.stripe_customer_id) {
-        return res.status(400).json({
-          success: false,
-          message:
-            'Este usuário ainda não possui um perfil de cliente no Stripe. Crie o cliente primeiro.',
-        });
-      }
-
-      //Busca o preço em tempo real
-      const stripePrice = await stripe.prices.retrieve(priceId);
-
-      if (!stripePrice.unit_amount) {
-        return res.status(400).json({
-          success: false,
-          message: 'Esse item não possui um valor especificado.',
-        });
-      }
-
-      const paymentIntent = await stripe.paymentIntents.create({
-        amount: stripePrice.unit_amount,
-        currency: stripePrice.currency,
-        customer: usuario.stripe_customer_id,
-        automatic_payment_methods: {
-          enabled: true,
-        },
-        metadata: {
-          usuario_id_interno: usuario.id,
-        },
-      });
-
-      return res.status(201).json({
-        success: true,
-        message: 'Intenção de pagamento gerada com sucesso.',
-        clientSecret: paymentIntent.client_secret,
-        paymentIntentId: paymentIntent.id,
-      });
-    } catch (err) {
-      console.error(err);
-      return res.status(500).json({
-        success: false,
-        message: 'Ocorreu um erro ao gerar a intenção de pagamento.',
-        error: err,
-      });
-    }
-  }
-
-  async confirmPaymentIntent(req: Request, res: Response) {
-    try {
-      const { paymentIntentId } = req.body;
-
-      const confirmed = await stripe.paymentIntents.confirm(paymentIntentId, {
-        payment_method: 'pm_card_visa',
+      const session = await stripe.checkout.sessions.create({
+        customer: stripe_customer_id,
+        mode: 'payment',
+        line_items: [
+          {
+            price: process.env.STRIPE_PRICE_ID as string,
+            quantity: 1,
+          },
+        ],
+        success_url: `${process.env.FRONTEND_URL}/dashboard?upgrade=success`,
+        cancel_url: `${process.env.FRONTEND_URL}/planos`,
       });
 
       return res.status(200).json({
         success: true,
-        status: confirmed.status,
-        data: confirmed,
+        checkout_url: session.url,
       });
     } catch (err) {
       console.error(err);
-
       return res.status(500).json({
         success: false,
-        message: 'Erro ao confirmar pagamento',
+        message: 'Erro ao criar sessão de checkout.',
       });
     }
+  }
+
+  async handleWebhook(req: Request, res: Response) {
+    const sig = req.headers['stripe-signature'] as string;
+    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET as string;
+
+    let event;
+
+    try {
+      event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
+    } catch (err) {
+      console.error('Webhook inválido:', err);
+      return res
+        .status(400)
+        .json({ success: false, message: 'Webhook inválido.' });
+    }
+
+    if (event.type === 'checkout.session.completed') {
+      const session = event.data.object;
+      const stripeCustomerId = session.customer as string;
+
+      await prisma.usuario.update({
+        where: { stripe_customer_id: stripeCustomerId },
+        data: { plano: 'PAGO' },
+      });
+
+      console.log('Plano atualizado para PAGO:', stripeCustomerId);
+    }
+
+    return res
+      .status(200)
+      .json({
+        success: true,
+        message: 'Plano atualizado para pago com sucesso.',
+      });
   }
 }
