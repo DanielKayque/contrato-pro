@@ -29,7 +29,9 @@ export class ContratoController {
     const usuarioId = req.userId; // vem do middleware autenticar
 
     if (!usuarioId) {
-      return res.status(401).json({ message: 'Faça login para continuar' });
+      return res
+        .status(401)
+        .json({ success: false, message: 'Faça login para continuar' });
     }
 
     try {
@@ -52,9 +54,9 @@ export class ContratoController {
 
         if (totalNoMes >= 3) {
           return res.status(403).json({
+            success: false,
             message:
               'Limite de 3 contratos/mês atingido. Faça upgrade para continuar.',
-            upgrade: true,
           });
         }
       }
@@ -82,18 +84,24 @@ export class ContratoController {
     } catch (err) {
       if (err instanceof Error) {
         console.error('Erro ao gerar contrato: ' + err.message);
-        return res
-          .status(500)
-          .json({ message: 'Erro ao gerar o contrato.', error: err.message });
+        return res.status(500).json({
+          success: false,
+          message: 'Erro ao gerar o contrato.',
+          error: err.message,
+        });
       }
-      return res.status(500).json({ message: 'Erro desconhecido.' });
+      return res
+        .status(500)
+        .json({ success: false, message: 'Erro desconhecido.' });
     }
   }
 
   async listar(req: Request, res: Response) {
     try {
       if (!req.userId) {
-        return res.status(401).json({ message: 'Faça login para continuar.' });
+        return res
+          .status(401)
+          .json({ success: false, message: 'Faça login para continuar.' });
       }
 
       const contratos = await prisma.contrato.findMany({
@@ -108,9 +116,11 @@ export class ContratoController {
         },
       });
 
-      return res.status(200).json({ contratos });
+      return res.status(200).json({ success: true, contratos });
     } catch {
-      return res.status(500).json({ message: 'Erro ao listar contratos.' });
+      return res
+        .status(500)
+        .json({ success: false, message: 'Erro ao listar contratos.' });
     }
   }
 }
