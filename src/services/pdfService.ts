@@ -111,6 +111,38 @@ const templates: Record<string, (dados: DadosContrato) => string> = {
     </body></html>`,
 };
 
+const templateGenerico = (titulo: string, d: DadosContrato) => `
+  <html><head><style>
+    body { font-family: Arial, sans-serif; padding: 60px; color: #1a1a1a; line-height: 1.7; }
+    h1 { font-size: 22px; border-bottom: 2px solid #1a1a1a; padding-bottom: 12px; margin-bottom: 32px; }
+    .campo { margin-bottom: 12px; }
+    .label { font-size: 11px; text-transform: uppercase; color: #666; letter-spacing: 0.05em; }
+    .valor { font-size: 15px; font-weight: 500; }
+    .clausulas h2 { font-size: 14px; margin-bottom: 8px; margin-top: 24px; }
+    .clausulas p { font-size: 13px; color: #333; }
+    .assinaturas { display: flex; justify-content: space-between; margin-top: 80px; }
+    .assinatura { text-align: center; border-top: 1px solid #333; padding-top: 8px; width: 200px; font-size: 12px; }
+  </style></head><body>
+    <h1>Contrato de Prestação de Serviços — ${titulo}</h1>
+    <div class="campo"><div class="label">Contratante</div><div class="valor">${d.nomeCliente}</div></div>
+    <div class="campo"><div class="label">Contratado</div><div class="valor">${d.nomeFreelancer}</div></div>
+    <div class="campo"><div class="label">Serviço</div><div class="valor">${d.servico}</div></div>
+    <div class="campo"><div class="label">Valor total</div><div class="valor">R$ ${d.valor}</div></div>
+    <div class="campo"><div class="label">Período</div><div class="valor">${d.dataInicio} até ${d.dataFim}</div></div>
+    <div class="clausulas">
+      <h2>1. Objeto</h2>
+      <p>O contratado se compromete a entregar o serviço de ${d.servico} conforme acordado entre as partes.</p>
+      <h2>2. Pagamento</h2>
+      <p>O valor de R$ ${d.valor} será pago conforme condições acordadas entre as partes.</p>
+      <h2>3. Rescisão</h2>
+      <p>O cancelamento deve ser comunicado com 7 dias de antecedência por qualquer uma das partes.</p>
+    </div>
+    <div class="assinaturas">
+      <div class="assinatura">${d.nomeCliente}<br>Contratante</div>
+      <div class="assinatura">${d.nomeFreelancer}<br>Contratado</div>
+    </div>
+  </body></html>`;
+
 export async function gerarPDF(
   nicho: string,
   dados: DadosContrato,
@@ -118,7 +150,7 @@ export async function gerarPDF(
   const templateFn = templates[nicho];
   if (!templateFn) throw new Error(`Nicho inválido: ${nicho}`);
 
-  const html = templateFn(dados);
+  const html = templateFn ? templateFn(dados) : templateGenerico(nicho, dados);
   const file = { content: html };
   const options = { format: 'A4' as const };
 
