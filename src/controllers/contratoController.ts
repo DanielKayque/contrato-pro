@@ -123,4 +123,31 @@ export class ContratoController {
         .json({ success: false, message: 'Erro ao listar contratos.' });
     }
   }
+
+  async listarUm(req: Request, res: Response) {
+    const { id } = req.params;
+
+    if (!req.userId) {
+      return res
+        .status(401)
+        .json({ success: false, message: 'Faça login para continuar' });
+    }
+
+    try {
+      const contrato = await prisma.contrato.findFirst({
+        where: { usuarioId: req.userId, id: id as string },
+      });
+
+      if (!contrato){
+        return res.status(404).json({success: false, message: "Nenhum contrato encontrado com esse id."})
+      }
+
+      return res.status(200).json({ success: true, contrato });
+    } catch (err) {
+      console.error('Erro desconhecido' + err);
+      return res
+        .status(500)
+        .json({ success: false, message: 'Ocorreu um erro desconhecido.' });
+    }
+  }
 }
